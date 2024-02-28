@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f4f4f4;
+    }
+
+    form {
+      text-align: center;
+      border: 2px solid rgba(0, 0, 0, 0.2);
+      padding: 20px;
+      border-radius: 8px;
+      background-color: white;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    input {
+      padding: 8px;
+      margin-bottom: 15px;
+    }
+
+    button {
+      padding: 10px;
+      background-color: #190aee;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    #resultado {
+      margin-bottom: 15px;
+    }
+
+    #categoria {
+      font-weight: bold;
+    }
+  </style>
+  <title>Calculadora de Idade</title>
+</head>
+<body>
+
+  <form id="form">
+    <label for="nome">Nome:</label>
+    <input type="text" id="nome" required>
+
+    <label for="sobrenome">Sobrenome:</label>
+    <input type="text" id="sobrenome" required>
+
+    <label for="anoNascimento">Data de Nascimento (dd/mm/yyyy):</label>
+    <input type="text" id="anoNascimento" placeholder="dd/mm/yyyy" required>
+
+    <button type="button" onclick="calcularIdade()">Juntar Nome e Calcular Idade</button>
+
+    <p id="resultado"></p>
+    <p id="categoria"></p>
+  </form>
+
+  <script>
+    function calcularIdade() {
+      var nome = document.getElementById('nome').value;
+      var sobrenome = document.getElementById('sobrenome').value;
+      var dataNascimento = document.getElementById('anoNascimento').value;
+
+   
+      var partesData = dataNascimento.split('/');
+      var dia = parseInt(partesData[0]);
+      var mes = parseInt(partesData[1]) - 1; 
+      var ano = parseInt(partesData[2]);
+
+      var dataNasc = new Date(ano, mes, dia);
+      var dataAtual = new Date();
+
+      var idade = calcularIdadeFromDate(dataNasc, dataAtual);
+      var categoria = determinarCategoria(idade);
+
+      var resultado = `Nome Completo: ${nome} ${sobrenome}<br>Idade: ${idade} anos`;
+      var categoriaInfo = `Situação: ${categoria}`;
+
+      document.getElementById('resultado').innerHTML = resultado;
+      document.getElementById('categoria').innerHTML = categoriaInfo;
+    }
+
+    function calcularIdadeFromDate(dataNasc, dataAtual) {
+      var idade = dataAtual.getFullYear() - dataNasc.getFullYear();
+      var mesAtual = dataAtual.getMonth();
+      var mesNasc = dataNasc.getMonth();
+
+      if (mesAtual < mesNasc || (mesAtual === mesNasc && dataAtual.getDate() < dataNasc.getDate())) {
+        idade--;
+      }
+
+      return idade;
+    }
+
+    function determinarCategoria(idade) {
+      if (idade < 20) {
+        return 'Novinho';
+      } else if (idade >= 20 && idade < 40) {
+        return 'Maduro';
+      } else {
+        return 'Velho';
+      }
+    }
+  </script>
+
+</body>
+</html>
